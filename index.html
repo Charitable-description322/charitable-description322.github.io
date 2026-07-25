@@ -388,14 +388,21 @@
       charAnim(document.querySelector('.handle .at'), '@WotwFan', 60);
       charAnim(document.querySelector('.bio'), 'Bad person', 30);
       charAnim(document.querySelector('.stat'), 'idk what to type here', 30);
-      charAnim(document.querySelectorAll('.panel h3')[0], 'About', 40);
-      charAnim(document.querySelectorAll('.panel h3')[1], 'Interests', 40);
-      charAnim(document.querySelectorAll('.panel h3')[2], 'Projects', 40);
-      charAnim(document.querySelectorAll('.panel h3')[3], 'Links', 40);
-      var linksPs = document.querySelectorAll('.panel')[3].querySelectorAll('p');
-      charAnim(linksPs[0], 'Discord: sudoeoev', 25);
-      charAnim(linksPs[1], 'Telegram: @WotwFan', 25);
-      charAnim(linksPs[2], 'Usernames u may know: Capybara, 7day, Demidozz1, hummerhow, WotwFan, materialbase_color, Fuzzberry, someonebad, horrible,', 20);
+      var allPanels = document.querySelectorAll('.panel');
+      var panelTexts = [
+        { h3: 'About', ps: ['Just a random person on the internet. Nothing special here.'] },
+        { h3: 'Interests', ps: ['Music, tech, gaming, and exploring random things.'] },
+        { h3: 'Projects', ps: ['Nothing serious yet, but working on it.'] },
+        { h3: 'Links', ps: ['Discord: sudoeoev', 'Telegram: @WotwFan', 'Usernames u may know: Capybara, 7day, Demidozz1, hummerhow, WotwFan, materialbase_color, Fuzzberry, someonebad, horrible,'] }
+      ];
+      for (var pi = 0; pi < allPanels.length; pi++) {
+        var pt = panelTexts[pi];
+        charAnim(allPanels[pi].querySelector('h3'), pt.h3, 40);
+        var pps = allPanels[pi].querySelectorAll('p');
+        for (var pj = 0; pj < pps.length && pj < pt.ps.length; pj++) {
+          charAnim(pps[pj], pt.ps[pj], 25);
+        }
+      }
       charAnim(document.querySelector('.footer'), ':3', 60);
     });
 
