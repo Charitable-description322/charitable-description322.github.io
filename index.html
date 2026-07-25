@@ -94,13 +94,13 @@
       background: #0d1117; border: 1px solid #21262d; border-radius: 8px;
       padding: 12px; display: flex; align-items: center; gap: 12px;
       backdrop-filter: blur(10px);
-      min-width: 100px; max-width: 400px;
+      min-width: 100px; max-width: none;
     }
     .music-player img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     .music-player img.spinning { animation: spin 3s linear infinite; }
     .music-player .player-info { flex: 1; min-width: 0; }
-    .music-player .player-info .song-title { font-size: 13px; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .music-player .player-info .song-title { font-size: 13px; color: #e6edf3; white-space: nowrap; }
     .music-player .player-info .song-artist { font-size: 11px; color: #8b949e; }
     .music-player audio { display: none; }
     .music-player .controls { display: flex; gap: 8px; align-items: center; }
@@ -161,7 +161,7 @@
       var ctx = c.getContext('2d');
       ctx.font = '13px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif';
       var w = ctx.measureText(text).width + 200;
-      player.style.width = Math.max(200, Math.min(400, w)) + 'px';
+      player.style.width = Math.max(200, w) + 'px';
     }
     fitPlayerWidth();
 
