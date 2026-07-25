@@ -47,7 +47,7 @@
     #loader.hidden { opacity: 0; pointer-events: none; }
     #loader .bar { width: 200px; height: 3px; background: #21262d; border-radius: 2px; overflow: hidden; }
     #loader .bar-inner { width: 0%; height: 100%; background: #fff; border-radius: 2px; transition: width 0.3s ease; }
-    #loader .text { color: #8b949e; font-size: 13px; }
+    #loader .text { color: #8b949e; font-size: 13px; transition: opacity 0.3s ease; }
     #loader .enter-btn {
       opacity: 0; transition: opacity 0.5s ease;
       padding: 10px 24px; border: 1px solid #30363d; border-radius: 6px;
@@ -218,13 +218,30 @@
       if (w >= 100) { w = 100; clearInterval(loadInterval); }
       loadBar.style.width = w + '%';
       if (w >= 100) {
-        setTimeout(function() { loader.classList.add('show-btn'); }, 200);
+        setTimeout(function() {
+          typeWriteText(loadText, 'Loaded', 50, function() {
+            setTimeout(function() { loader.classList.add('show-btn'); }, 200);
+          });
+        }, 200);
       }
     }, 100);
     enterBtn.onclick = function() {
       loader.classList.add('hidden');
       audio.play().then(function() { img.classList.add('spinning'); }).catch(function(){});
     };
+    var loadText = document.querySelector('#loader .text');
+    function typeWriteText(el, text, speed, cb) {
+      var i = 0;
+      el.textContent = '';
+      function tick() {
+        if (i < text.length) {
+          el.textContent += text.charAt(i);
+          i++;
+          setTimeout(tick, speed);
+        } else if (cb) { cb(); }
+      }
+      tick();
+    }
 
     function typewriter(el, text, speed) {
       var i = 0;
