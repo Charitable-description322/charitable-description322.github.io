@@ -12,7 +12,7 @@
       padding-bottom: 60px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: #000; color: #c9d1d9; line-height: 1.6;
-      overflow-y: scroll; cursor: none;
+      overflow-y: scroll;
       background-image: url('https://preview.redd.it/what-do-you-think-humanity-did-after-the-ending-of-the-2005-v0-9f1z1324rpqe1.jpeg?auto=webp&s=85d566fac420a04ba0ed0462d6af18469e052373');
       background-size: cover;
       background-position: center;
@@ -30,7 +30,8 @@
       position: fixed;
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: #58a6ff;
+      background: #fff;
+      box-shadow: 0 0 8px 2px rgba(255,255,255,0.6);
       pointer-events: none;
       z-index: 9999;
       transition: opacity 0.15s ease;
@@ -45,7 +46,7 @@
     }
     #loader.hidden { opacity: 0; pointer-events: none; }
     #loader .bar { width: 200px; height: 3px; background: #21262d; border-radius: 2px; overflow: hidden; }
-    #loader .bar-inner { width: 0%; height: 100%; background: #58a6ff; border-radius: 2px; transition: width 0.3s ease; }
+    #loader .bar-inner { width: 0%; height: 100%; background: #fff; border-radius: 2px; transition: width 0.3s ease; }
     #loader .text { color: #8b949e; font-size: 13px; }
     .avatar-fixed {
       position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
@@ -68,8 +69,8 @@
       transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
     }
     .panel:hover {
-      border-color: #58a6ff;
-      box-shadow: 0 0 20px rgba(88,166,255,0.15);
+      border-color: #fff;
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
       transform: translateY(-2px);
     }
     .panel h3 { font-size: 16px; color: #e6edf3; margin-bottom: 8px; }
@@ -80,7 +81,7 @@
       background: #0d1117; border: 1px solid #21262d; border-radius: 8px;
       padding: 12px; display: flex; align-items: center; gap: 12px;
       backdrop-filter: blur(10px);
-      max-width: 300px;
+      min-width: 100px; max-width: 400px;
     }
     .music-player img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -104,17 +105,8 @@
     .music-player input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none; appearance: none;
       width: 12px; height: 12px; border-radius: 50%;
-      background: #58a6ff; border: none; cursor: pointer;
-    }
-    .custom-cursor {
-      position: fixed; width: 20px; height: 20px;
-      border: 2px solid #58a6ff; border-radius: 50%;
-      pointer-events: none; z-index: 9998;
-      transition: width 0.2s, height 0.2s, border-color 0.2s;
-      transform: translate(-50%, -50%);
-    }
-    .custom-cursor.click {
-      width: 10px; height: 10px; border-color: #c9d1d9;
+      background: #fff; border: none; cursor: pointer;
+      box-shadow: 0 0 6px 2px rgba(255,255,255,0.5);
     }
   </style>
 </head>
@@ -124,7 +116,6 @@
     <div class="text">Loading...</div>
   </div>
   <div class="trail" id="trail"></div>
-  <div class="custom-cursor" id="cursor"></div>
   <div class="avatar-fixed"><img src="https://images-ext-1.discordapp.net/external/MnFq7Ayc_rOQQaCTWb2t9lwyhigo69zaugW7tV3XBpc/%3Fsize%3D512/https/cdn.discordapp.com/avatars/1139133371683971093/6b941183dd830d0df1a4ce95cb03259b.png?format=webp&quality=lossless" alt="avatar"></div>
   <div class="music-player">
     <img src="song.webp" alt="album art" onerror="this.style.display='none'">
@@ -146,29 +137,38 @@
     var playBtn = document.getElementById('playBtn');
     var pauseBtn = document.getElementById('pauseBtn');
     var volumeSlider = document.getElementById('volumeSlider');
-    playBtn.onclick = function() { audio.play(); img.classList.add('spinning'); };
-    pauseBtn.onclick = function() { audio.pause(); img.classList.remove('spinning'); };
-    audio.onended = function() { img.classList.remove('spinning'); };
-    volumeSlider.oninput = function() { audio.volume = volumeSlider.value; };
+    window.addEventListener('DOMContentLoaded', function() {
+    audio.play();
+    img.classList.add('spinning');
+  });
+  playBtn.onclick = function() { audio.play(); img.classList.add('spinning'); };
+  pauseBtn.onclick = function() { audio.pause(); img.classList.remove('spinning'); };
+  audio.onended = function() { img.classList.remove('spinning'); };
+  volumeSlider.oninput = function() { audio.volume = volumeSlider.value; };
+
+  var player = document.querySelector('.music-player');
+  function updatePlayerWidth() {
+    var title = document.querySelector('.song-title');
+    if (title && title.textContent && title.textContent.length > 0) {
+      player.style.width = Math.max(200, Math.min(400, title.scrollWidth + 200)) + 'px';
+    } else {
+      player.style.width = '200px';
+    }
+  }
+  updatePlayerWidth();
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(updatePlayerWidth).observe(document.querySelector('.song-title'));
+  }
 
     var trail = document.getElementById('trail');
-    var cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', function(e) {
-      trail.style.left = e.clientX + 'px';
-      trail.style.top = e.clientY + 'px';
-      trail.style.opacity = '1';
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-    document.addEventListener('mouseleave', function() {
-      trail.style.opacity = '0';
-    });
-    document.addEventListener('mousedown', function() {
-      cursor.classList.add('click');
-    });
-    document.addEventListener('mouseup', function() {
-      cursor.classList.remove('click');
-    });
+  document.addEventListener('mousemove', function(e) {
+    trail.style.left = e.clientX + 'px';
+    trail.style.top = e.clientY + 'px';
+    trail.style.opacity = '1';
+  });
+  document.addEventListener('mouseleave', function() {
+    trail.style.opacity = '0';
+  });
 
     var loader = document.getElementById('loader');
     var loadBar = document.getElementById('loadBar');
