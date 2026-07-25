@@ -7,50 +7,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
     html, body { min-height: 100%; height: auto; }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #000; color: #e6edf3; line-height: 1.7;
       overflow-y: scroll;
       background-image: url('https://preview.redd.it/what-do-you-think-humanity-did-after-the-ending-of-the-2005-v0-9f1z1324rpqe1.jpeg?auto=webp&s=85d566fac420a04ba0ed0462d6af18469e052373');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      background-repeat: no-repeat;
+      background-size: cover; background-position: center;
+      background-attachment: fixed; background-repeat: no-repeat;
     }
     body::before {
-      content: '';
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 100%);
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.3) 100%);
       z-index: -1;
     }
-    .stars {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    canvas#particles {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       pointer-events: none; z-index: 0;
-      background-image:
-        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.3), transparent),
-        radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.2), transparent),
-        radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,0.4), transparent),
-        radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.2), transparent),
-        radial-gradient(1.5px 1.5px at 90% 80%, rgba(255,255,255,0.3), transparent),
-        radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.15), transparent),
-        radial-gradient(1px 1px at 60% 90%, rgba(255,255,255,0.2), transparent),
-        radial-gradient(1.5px 1.5px at 40% 30%, rgba(255,255,255,0.25), transparent),
-        radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,0.15), transparent),
-        radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.2), transparent);
-      animation: twinkle 4s ease-in-out infinite alternate;
-    }
-    @keyframes twinkle {
-      0% { opacity: 0.6; }
-      100% { opacity: 1; }
     }
     .trail-dot {
-      position: fixed; width: 5px; height: 5px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 0 8px 3px rgba(255,255,255,0.4);
+      position: fixed; border-radius: 50%;
       pointer-events: none; z-index: 9999;
+      background: radial-gradient(circle, #fff 0%, rgba(255,255,255,0.2) 100%);
+      transform: translate(-50%, -50%);
     }
     #loader {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -73,53 +52,74 @@
     }
     #loader .enter-btn:hover { border-color: #fff; background: rgba(255,255,255,0.1); box-shadow: 0 0 24px rgba(255,255,255,0.1); }
     #loader.show-btn .enter-btn { opacity: 1; }
-    .avatar-fixed {
+    .avatar-wrap {
       position: relative; margin: 50px auto 0;
-      width: 150px; height: 150px; border-radius: 50%;
-      padding: 3px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
-      z-index: 100; overflow: hidden;
+      width: 150px; height: 150px;
     }
-    .avatar-fixed img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .avatar-wrap::before {
+      content: ''; position: absolute;
+      top: -4px; left: -4px; right: -4px; bottom: -4px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.05));
+      z-index: -1;
+      animation: avatarPulse 3s ease-in-out infinite;
+    }
+    @keyframes avatarPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.15); }
+      50% { box-shadow: 0 0 40px 8px rgba(255,255,255,0.08); }
+    }
+    .avatar-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
     .spacer { height: 30px; }
-    .content { padding: 0 24px 60px; max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
+    .content { padding: 0 24px 60px; max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
     .handle { text-align: center; margin-bottom: 4px; }
-    .handle h1 { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #fff, #a0a0b0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
+    .handle h1 { font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #fff 30%, #888 70%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
     .handle .at { color: #6b7280; font-size: 14px; font-weight: 400; }
     .bio { text-align: center; margin: 24px 0; color: #9ca3af; font-size: 15px; font-weight: 300; max-width: 480px; margin-left: auto; margin-right: auto; }
     .stats { display: flex; justify-content: center; gap: 24px; margin: 28px 0; flex-wrap: wrap; }
     .stat { color: #6b7280; font-size: 14px; font-weight: 300; }
-    @keyframes borderGlow {
-      0%, 100% { border-color: rgba(255,255,255,0.08); box-shadow: 0 0 0 transparent; }
-      50% { border-color: rgba(255,255,255,0.15); box-shadow: 0 0 30px rgba(255,255,255,0.03); }
-    }
     .panel {
-      background: rgba(10,12,18,0.5); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px; padding: 24px; margin-bottom: 20px;
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      animation: borderGlow 4s ease-in-out infinite;
+      background: rgba(10,12,18,0.6); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; padding: 28px; margin-bottom: 24px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative; overflow: hidden;
+      opacity: 0; transform: translateY(40px);
+    }
+    .panel.visible { opacity: 1; transform: translateY(0); }
+    .panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    }
+    .panel::after {
+      content: ''; position: absolute; top: 0; bottom: 0; left: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,0.08), transparent);
     }
     .panel:hover {
-      border-color: rgba(255,255,255,0.3);
-      box-shadow: 0 0 40px rgba(255,255,255,0.06);
-      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.25);
+      box-shadow: 0 0 50px rgba(255,255,255,0.04), inset 0 0 50px rgba(255,255,255,0.02);
+      transform: translateY(-4px) scale(1.005);
     }
-    .panel h3 { font-size: 15px; color: #e6edf3; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.3px; }
-    .panel p { font-size: 14px; color: #9ca3af; font-weight: 300; line-height: 1.8; }
-    .footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 12px; color: #484f58; font-weight: 300; }
+    .panel h3 { font-size: 15px; color: #e6edf3; margin-bottom: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+    .panel p { font-size: 14px; color: #9ca3af; font-weight: 300; line-height: 1.9; }
+    .panel p + p { margin-top: 8px; }
+    .footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 12px; color: #484f58; font-weight: 300; }
     .music-player {
       position: fixed; top: 20px; right: 20px; z-index: 100;
-      background: rgba(10,12,18,0.6); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px; padding: 14px;
+      background: rgba(10,12,18,0.7); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; padding: 16px;
       display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       transition: all 0.3s ease; min-width: 100px;
+      overflow: hidden;
     }
-    .music-player:hover {
-      border-color: rgba(255,255,255,0.2);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    .music-player::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
     }
+    .music-player:hover { border-color: rgba(255,255,255,0.15); box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
     .music-player img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     .music-player img.spinning { animation: spin 3s linear infinite; }
@@ -129,11 +129,11 @@
     .music-player audio { display: none; }
     .music-player .controls { display: flex; gap: 6px; align-items: center; }
     .music-player .controls button {
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-      color: #d1d5db; border-radius: 6px; padding: 6px 10px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+      color: #d1d5db; border-radius: 8px; padding: 6px 10px;
       cursor: pointer; font-size: 12px; transition: all 0.2s;
     }
-    .music-player .controls button:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+    .music-player .controls button:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
     .music-player input[type="range"] {
       width: 56px; height: 3px;
       -webkit-appearance: none; appearance: none;
@@ -161,17 +161,45 @@
     .progress-wrap .time-total {
       font-size: 10px; color: #6b7280; min-width: 28px; text-align: center; font-weight: 300;
     }
+    .viz {
+      display: flex; align-items: flex-end; gap: 2px; height: 24px;
+      margin-left: auto;
+    }
+    .viz div {
+      width: 3px; height: 4px;
+      background: linear-gradient(to top, rgba(255,255,255,0.3), #fff);
+      border-radius: 2px;
+      transition: height 0.1s ease;
+    }
+    @keyframes charFade {
+      0% { opacity: 0; filter: blur(4px); }
+      100% { opacity: 1; filter: blur(0); }
+    }
+    .char-anim span {
+      display: inline-block;
+      animation: charFade 0.5s ease forwards;
+      opacity: 0;
+    }
+    .scroll-hint {
+      text-align: center; margin: 10px 0 0; font-size: 11px;
+      color: #484f58; animation: scrollBob 2s ease-in-out infinite;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    @keyframes scrollBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
   </style>
 </head>
 <body>
-  <div class="stars"></div>
+  <canvas id="particles"></canvas>
   <div id="loader">
     <div class="bar"><div class="bar-inner" id="loadBar"></div></div>
     <div class="text">Loading...</div>
     <div class="enter-btn" id="enterBtn">Click to Enter</div>
   </div>
   
-  <div class="avatar-fixed"><img src="https://images-ext-1.discordapp.net/external/MnFq7Ayc_rOQQaCTWb2t9lwyhigo69zaugW7tV3XBpc/%3Fsize%3D512/https/cdn.discordapp.com/avatars/1139133371683971093/6b941183dd830d0df1a4ce95cb03259b.png?format=webp&quality=lossless" alt="avatar"></div>
+  <div class="avatar-wrap"><img src="https://images-ext-1.discordapp.net/external/MnFq7Ayc_rOQQaCTWb2t9lwyhigo69zaugW7tV3XBpc/%3Fsize%3D512/https/cdn.discordapp.com/avatars/1139133371683971093/6b941183dd830d0df1a4ce95cb03259b.png?format=webp&quality=lossless" alt="avatar"></div>
   <div class="music-player">
     <img src="song.webp" alt="album art" onerror="this.style.display='none'">
     <div class="player-info">
@@ -184,6 +212,7 @@
       <span style="color:#6b7280;font-size:11px;font-weight:300">Vol</span>
       <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
     </div>
+    <div class="viz" id="viz"></div>
     <div class="progress-wrap" id="progressWrap">
       <span class="time-current" id="timeCurrent">0:00</span>
       <div class="progress-bar" id="progressBar"><div class="progress-bar-fill" id="progressFill"></div></div>
@@ -192,13 +221,43 @@
     <audio src="song.mp3" preload="none"></audio>
   </div>
   <script>
+    var c = document.getElementById('particles');
+    var ctx = c.getContext('2d');
+    var w, h, particles = [];
+    function resize() { w = c.width = window.innerWidth; h = c.height = window.innerHeight; }
+    window.onresize = resize; resize();
+    for (var i = 0; i < 80; i++) {
+      particles.push({
+        x: Math.random() * w, y: Math.random() * h,
+        r: Math.random() * 2 + 0.5,
+        dx: (Math.random() - 0.5) * 0.3,
+        dy: -Math.random() * 0.5 - 0.1,
+        o: Math.random() * 0.6 + 0.2
+      });
+    }
+    function drawParticles() {
+      ctx.clearRect(0, 0, w, h);
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,' + p.o + ')';
+        ctx.fill();
+        p.x += p.dx; p.y += p.dy;
+        if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+      }
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
     var audio = document.querySelector('.music-player audio');
     var img = document.querySelector('.music-player img');
     var playBtn = document.getElementById('playBtn');
     var pauseBtn = document.getElementById('pauseBtn');
     var volumeSlider = document.getElementById('volumeSlider');
     var player = document.querySelector('.music-player');
-
     playBtn.onclick = function() { audio.play(); img.classList.add('spinning'); };
     pauseBtn.onclick = function() { audio.pause(); img.classList.remove('spinning'); };
     audio.onended = function() { img.classList.remove('spinning'); };
@@ -207,9 +266,7 @@
     var timeCurrent = document.getElementById('timeCurrent');
     var timeTotal = document.getElementById('timeTotal');
     var progressBar = document.getElementById('progressBar');
-    audio.addEventListener('loadedmetadata', function() {
-      timeTotal.textContent = formatTime(audio.duration);
-    });
+    audio.addEventListener('loadedmetadata', function() { timeTotal.textContent = formatTime(audio.duration); });
     audio.addEventListener('timeupdate', function() {
       var pct = (audio.currentTime / audio.duration) * 100 || 0;
       progressFill.style.width = pct + '%';
@@ -217,48 +274,71 @@
     });
     progressBar.addEventListener('click', function(e) {
       var rect = progressBar.getBoundingClientRect();
-      var pct = (e.clientX - rect.left) / rect.width;
-      audio.currentTime = pct * audio.duration;
+      audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
     });
     function formatTime(s) {
-      var m = Math.floor(s / 60);
-      var sec = Math.floor(s % 60);
+      var m = Math.floor(s / 60), sec = Math.floor(s % 60);
       return m + ':' + (sec < 10 ? '0' : '') + sec;
     }
 
+    var viz = document.getElementById('viz');
+    for (var i = 0; i < 12; i++) {
+      var bar = document.createElement('div');
+      viz.appendChild(bar);
+    }
+    var vizBars = viz.children;
+    var audioCtx, analyser, dataArray, src;
+    function initViz() {
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 64;
+        src = audioCtx.createMediaElementSource(audio);
+        src.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
+        function updateViz() {
+          if (audio.paused || audio.ended) { requestAnimationFrame(updateViz); return; }
+          analyser.getByteFrequencyData(dataArray);
+          for (var i = 0; i < vizBars.length; i++) {
+            var val = dataArray[i * 2] / 255;
+            vizBars[i].style.height = Math.max(4, val * 22) + 'px';
+          }
+          requestAnimationFrame(updateViz);
+        }
+        updateViz();
+      } catch(e) {}
+    }
+
     var trailDots = [];
-    var trailCount = 12;
+    var trailCount = 16;
     for (var i = 0; i < trailCount; i++) {
       var dot = document.createElement('div');
       dot.className = 'trail-dot';
+      var size = 6 - i * 0.35;
+      dot.style.width = Math.max(2, size) + 'px';
+      dot.style.height = Math.max(2, size) + 'px';
       dot.style.opacity = '0';
-      var size = 5 - i * 0.3;
-      dot.style.width = size + 'px';
-      dot.style.height = size + 'px';
       document.body.appendChild(dot);
-      trailDots.push({ el: dot, x: 0, y: 0 });
+      trailDots.push({ el: dot, x: 0, y: 0, sx: 0, sy: 0 });
     }
-    var mouseX = 0, mouseY = 0;
-    document.addEventListener('mousemove', function(e) {
-      mouseX = e.clientX; mouseY = e.clientY;
-    });
-    document.addEventListener('mouseleave', function() {
-      trailDots.forEach(function(d) { d.el.style.opacity = '0'; });
-    });
+    var mx = 0, my = 0;
+    document.addEventListener('mousemove', function(e) { mx = e.clientX; my = e.clientY; });
+    document.addEventListener('mouseleave', function() { trailDots.forEach(function(d) { d.el.style.opacity = '0'; }); });
     function animateTrail() {
-      trailDots[0].el.style.left = mouseX + 'px';
-      trailDots[0].el.style.top = mouseY + 'px';
+      trailDots[0].el.style.left = mx + 'px';
+      trailDots[0].el.style.top = my + 'px';
       trailDots[0].el.style.opacity = '1';
       for (var i = 1; i < trailDots.length; i++) {
         var prev = trailDots[i - 1];
         var curr = trailDots[i];
-        curr.x += (prev.x - curr.x) * 0.3;
-        curr.y += (prev.y - curr.y) * 0.3;
-        prev.x = parseFloat(prev.el.style.left) || mouseX;
-        prev.y = parseFloat(prev.el.style.top) || mouseY;
-        curr.el.style.left = curr.x + 'px';
-        curr.el.style.top = curr.y + 'px';
-        curr.el.style.opacity = Math.max(0, 1 - i / trailCount);
+        var px = parseFloat(prev.el.style.left) || mx;
+        var py = parseFloat(prev.el.style.top) || my;
+        curr.sx += (px - curr.sx) * 0.25;
+        curr.sy += (py - curr.sy) * 0.25;
+        curr.el.style.left = curr.sx + 'px';
+        curr.el.style.top = curr.sy + 'px';
+        curr.el.style.opacity = Math.max(0, 1 - i / trailCount) * 0.9;
       }
       requestAnimationFrame(animateTrail);
     }
@@ -267,94 +347,74 @@
     var loader = document.getElementById('loader');
     var loadBar = document.getElementById('loadBar');
     var enterBtn = document.getElementById('enterBtn');
-    var w = 0;
+    var ww = 0;
     var loadInterval = setInterval(function() {
-      w += Math.random() * 30;
-      if (w >= 100) { w = 100; clearInterval(loadInterval); }
-      loadBar.style.width = w + '%';
-      if (w >= 100) {
-        setTimeout(function() {
-          typeWriteText(loadText, 'Loaded', 50, function() {
-            setTimeout(function() { loader.classList.add('show-btn'); }, 200);
-          });
-        }, 200);
+      ww += Math.random() * 30;
+      if (ww >= 100) { ww = 100; clearInterval(loadInterval); }
+      loadBar.style.width = ww + '%';
+      if (ww >= 100) {
+        setTimeout(function() { typeWriteText(loadText, 'Loaded', 50, function() { setTimeout(function() { loader.classList.add('show-btn'); }, 200); }); }, 200);
       }
     }, 100);
     enterBtn.onclick = function() {
-      loader.classList.add('hidden');
+      loader.classList.add('hidden'); initViz();
       audio.play().then(function() { img.classList.add('spinning'); }).catch(function(){});
     };
     var loadText = document.querySelector('#loader .text');
     function typeWriteText(el, text, speed, cb) {
-      var i = 0;
-      el.textContent = '';
-      function tick() {
-        if (i < text.length) {
-          el.textContent += text.charAt(i);
-          i++;
-          setTimeout(tick, speed);
-        } else if (cb) { cb(); }
-      }
+      var i = 0; el.textContent = '';
+      function tick() { if (i < text.length) { el.textContent += text.charAt(i); i++; setTimeout(tick, speed); } else if (cb) cb(); }
       tick();
     }
 
-    function typewriter(el, text, speed) {
+    function charAnim(el, text, speed) {
       var i = 0;
-      function tick() {
+      el.innerHTML = '';
+      function next() {
         if (i < text.length) {
-          el.textContent += text.charAt(i);
+          var s = document.createElement('span');
+          s.textContent = text.charAt(i);
+          s.style.animationDelay = (i * speed) + 'ms';
+          el.appendChild(s);
           i++;
-          setTimeout(tick, speed);
+          setTimeout(next, speed);
         }
       }
-      tick();
+      next();
     }
 
     window.addEventListener('DOMContentLoaded', function() {
-      typewriter(document.querySelector('.handle h1'), '『!Сapybara¡』', 40);
-      typewriter(document.querySelector('.handle .at'), '@WotwFan', 60);
-      typewriter(document.querySelector('.bio'), 'Bad person', 40);
-      typewriter(document.querySelector('.stat'), 'idk what to type here', 40);
-      typewriter(document.querySelectorAll('.panel h3')[0], 'About', 50);
-      typewriter(document.querySelectorAll('.panel h3')[1], 'Interests', 50);
-      typewriter(document.querySelectorAll('.panel h3')[2], 'Projects', 50);
-      typewriter(document.querySelectorAll('.panel h3')[3], 'Links', 50);
+      charAnim(document.querySelector('.handle h1'), '『!Сapybara¡』', 40);
+      charAnim(document.querySelector('.handle .at'), '@WotwFan', 60);
+      charAnim(document.querySelector('.bio'), 'Bad person', 30);
+      charAnim(document.querySelector('.stat'), 'idk what to type here', 30);
+      charAnim(document.querySelectorAll('.panel h3')[0], 'About', 40);
+      charAnim(document.querySelectorAll('.panel h3')[1], 'Interests', 40);
+      charAnim(document.querySelectorAll('.panel h3')[2], 'Projects', 40);
+      charAnim(document.querySelectorAll('.panel h3')[3], 'Links', 40);
       var linksPs = document.querySelectorAll('.panel')[3].querySelectorAll('p');
-      typewriter(linksPs[0], 'Discord: sudoeoev', 40);
-      typewriter(linksPs[1], 'Telegram: @WotwFan', 40);
-      typewriter(linksPs[2], 'Usernames u may know: Capybara, 7day, Demidozz1, hummerhow, WotwFan, materialbase_color, Fuzzberry, someonebad, horrible,', 40);
-      typewriter(document.querySelector('.footer'), ':3', 40);
+      charAnim(linksPs[0], 'Discord: sudoeoev', 25);
+      charAnim(linksPs[1], 'Telegram: @WotwFan', 25);
+      charAnim(linksPs[2], 'Usernames u may know: Capybara, 7day, Demidozz1, hummerhow, WotwFan, materialbase_color, Fuzzberry, someonebad, horrible,', 20);
+      charAnim(document.querySelector('.footer'), ':3', 60);
     });
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.panel').forEach(function(p) { observer.observe(p); });
   </script>
   <div class="spacer"></div>
   <div class="content">
-    <div class="handle">
-      <h1></h1>
-      <div class="at"></div>
-    </div>
+    <div class="handle"><h1></h1><div class="at"></div></div>
     <p class="bio"></p>
-    <div class="stats">
-      <div class="stat"></div>
-    </div>
-    <div class="panel">
-      <h3></h3>
-      <p></p>
-    </div>
-    <div class="panel">
-      <h3></h3>
-      <p></p>
-    </div>
-    <div class="panel">
-      <h3></h3>
-      <p></p>
-    </div>
-    <div class="panel">
-      <h3></h3>
-      <p></p>
-      <p></p>
-      <p></p>
-    </div>
+    <div class="stats"><div class="stat"></div></div>
+    <div class="panel"><h3></h3><p></p></div>
+    <div class="panel"><h3></h3><p></p></div>
+    <div class="panel"><h3></h3><p></p></div>
+    <div class="panel"><h3></h3><p></p><p></p><p></p></div>
     <div class="footer"></div>
+    <div class="scroll-hint">scroll</div>
   </div>
 </body>
 </html>
