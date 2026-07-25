@@ -40,21 +40,35 @@
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: #000; z-index: 10000;
       display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 16px;
+      flex-direction: column; gap: 20px;
+      cursor: pointer;
       transition: opacity 0.6s ease;
     }
     #loader.hidden { opacity: 0; pointer-events: none; }
     #loader .bar { width: 200px; height: 3px; background: #21262d; border-radius: 2px; overflow: hidden; }
     #loader .bar-inner { width: 0%; height: 100%; background: #fff; border-radius: 2px; transition: width 0.3s ease; }
     #loader .text { color: #8b949e; font-size: 13px; }
-    .avatar-fixed {
-      position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    #loader .enter-btn {
+      opacity: 0; transition: opacity 0.5s ease;
+      padding: 10px 24px; border: 1px solid #30363d; border-radius: 6px;
+      color: #e6edf3; font-size: 14px; background: #0d1117;
+      cursor: pointer;
+    }
+    #loader .enter-btn:hover { border-color: #fff; }
+    #loader.show-btn .enter-btn { opacity: 1; }
+    #loader .avatar-preview {
       width: 80px; height: 80px; border-radius: 50%;
-      background: #161b22; border: 2px solid #30363d; z-index: 100;
+      border: 2px solid #30363d; overflow: hidden;
+    }
+    #loader .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-fixed {
+      position: relative; margin: 40px auto 0;
+      width: 150px; height: 150px; border-radius: 50%;
+      background: #161b22; border: 3px solid #30363d; z-index: 100;
       overflow: hidden;
     }
     .avatar-fixed img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-    .spacer { height: 300px; }
+    .spacer { height: 30px; }
     .content { padding: 0 20px 40px; max-width: 720px; margin: 0 auto; }
     .handle { text-align: center; margin-bottom: 8px; }
     .handle h1 { color: #e6edf3; font-size: 24px; }
@@ -111,8 +125,10 @@
 </head>
 <body>
   <div id="loader">
+    <div class="avatar-preview"><img src="https://images-ext-1.discordapp.net/external/MnFq7Ayc_rOQQaCTWb2t9lwyhigo69zaugW7tV3XBpc/%3Fsize%3D512/https/cdn.discordapp.com/avatars/1139133371683971093/6b941183dd830d0df1a4ce95cb03259b.png?format=webp&quality=lossless" alt="avatar"></div>
     <div class="bar"><div class="bar-inner" id="loadBar"></div></div>
     <div class="text">Loading...</div>
+    <div class="enter-btn" id="enterBtn">Click to Enter</div>
   </div>
   
   <div class="avatar-fixed"><img src="https://images-ext-1.discordapp.net/external/MnFq7Ayc_rOQQaCTWb2t9lwyhigo69zaugW7tV3XBpc/%3Fsize%3D512/https/cdn.discordapp.com/avatars/1139133371683971093/6b941183dd830d0df1a4ce95cb03259b.png?format=webp&quality=lossless" alt="avatar"></div>
@@ -193,29 +209,22 @@
     }
     animateTrail();
 
-    var played = false;
-    function startAudio() {
-      if (!played) {
-        played = true;
-        audio.play().then(function() { img.classList.add('spinning'); }).catch(function(){});
-        document.removeEventListener('click', startAudio);
-        document.removeEventListener('touchstart', startAudio);
-      }
-    }
-    document.addEventListener('click', startAudio);
-    document.addEventListener('touchstart', startAudio);
-
     var loader = document.getElementById('loader');
     var loadBar = document.getElementById('loadBar');
+    var enterBtn = document.getElementById('enterBtn');
     var w = 0;
     var loadInterval = setInterval(function() {
       w += Math.random() * 30;
       if (w >= 100) { w = 100; clearInterval(loadInterval); }
       loadBar.style.width = w + '%';
       if (w >= 100) {
-        setTimeout(function() { loader.classList.add('hidden'); }, 300);
+        setTimeout(function() { loader.classList.add('show-btn'); }, 200);
       }
     }, 100);
+    enterBtn.onclick = function() {
+      loader.classList.add('hidden');
+      audio.play().then(function() { img.classList.add('spinning'); }).catch(function(){});
+    };
 
     function typewriter(el, text, speed) {
       var i = 0;
