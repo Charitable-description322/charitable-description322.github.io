@@ -12,7 +12,7 @@
       padding-bottom: 60px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: #000; color: #c9d1d9; line-height: 1.6;
-      overflow-y: scroll;
+      overflow-y: scroll; cursor: none;
       background-image: url('https://preview.redd.it/what-do-you-think-humanity-did-after-the-ending-of-the-2005-v0-9f1z1324rpqe1.jpeg?auto=webp&s=85d566fac420a04ba0ed0462d6af18469e052373');
       background-size: cover;
       background-position: center;
@@ -26,6 +26,27 @@
       background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%);
       z-index: -1;
     }
+    .trail {
+      position: fixed;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #58a6ff;
+      pointer-events: none;
+      z-index: 9999;
+      transition: opacity 0.15s ease;
+      opacity: 0;
+    }
+    #loader {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: #000; z-index: 10000;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 16px;
+      transition: opacity 0.6s ease;
+    }
+    #loader.hidden { opacity: 0; pointer-events: none; }
+    #loader .bar { width: 200px; height: 3px; background: #21262d; border-radius: 2px; overflow: hidden; }
+    #loader .bar-inner { width: 0%; height: 100%; background: #58a6ff; border-radius: 2px; transition: width 0.3s ease; }
+    #loader .text { color: #8b949e; font-size: 13px; }
     .avatar-fixed {
       position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
       width: 80px; height: 80px; border-radius: 50%;
@@ -42,7 +63,15 @@
     .stats { display: flex; justify-content: center; gap: 24px; margin: 32px 0; flex-wrap: wrap; }
     .stat { color: #8b949e; font-size: 14px; }
     .stat span { color: #58a6ff; }
-    .panel { background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+    .panel {
+      background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 20px; margin-bottom: 24px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .panel:hover {
+      border-color: #58a6ff;
+      box-shadow: 0 0 20px rgba(88,166,255,0.15);
+      transform: translateY(-2px);
+    }
     .panel h3 { font-size: 16px; color: #e6edf3; margin-bottom: 8px; }
     .panel p { font-size: 14px; color: #8b949e; }
     .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #21262d; text-align: center; font-size: 12px; color: #484f58; }
@@ -77,9 +106,25 @@
       width: 12px; height: 12px; border-radius: 50%;
       background: #58a6ff; border: none; cursor: pointer;
     }
+    .custom-cursor {
+      position: fixed; width: 20px; height: 20px;
+      border: 2px solid #58a6ff; border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transition: width 0.2s, height 0.2s, border-color 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .custom-cursor.click {
+      width: 10px; height: 10px; border-color: #c9d1d9;
+    }
   </style>
 </head>
 <body>
+  <div id="loader">
+    <div class="bar"><div class="bar-inner" id="loadBar"></div></div>
+    <div class="text">Loading...</div>
+  </div>
+  <div class="trail" id="trail"></div>
+  <div class="custom-cursor" id="cursor"></div>
   <div class="avatar-fixed"><img src="https://images-ext-1.discordapp.net/external/MnFq7Ayc_rOQQaCTWb2t9lwyhigo69zaugW7tV3XBpc/%3Fsize%3D512/https/cdn.discordapp.com/avatars/1139133371683971093/6b941183dd830d0df1a4ce95cb03259b.png?format=webp&quality=lossless" alt="avatar"></div>
   <div class="music-player">
     <img src="song.webp" alt="album art" onerror="this.style.display='none'">
@@ -105,6 +150,58 @@
     pauseBtn.onclick = function() { audio.pause(); img.classList.remove('spinning'); };
     audio.onended = function() { img.classList.remove('spinning'); };
     volumeSlider.oninput = function() { audio.volume = volumeSlider.value; };
+
+    var trail = document.getElementById('trail');
+    var cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', function(e) {
+      trail.style.left = e.clientX + 'px';
+      trail.style.top = e.clientY + 'px';
+      trail.style.opacity = '1';
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    document.addEventListener('mouseleave', function() {
+      trail.style.opacity = '0';
+    });
+    document.addEventListener('mousedown', function() {
+      cursor.classList.add('click');
+    });
+    document.addEventListener('mouseup', function() {
+      cursor.classList.remove('click');
+    });
+
+    var loader = document.getElementById('loader');
+    var loadBar = document.getElementById('loadBar');
+    var width = 0;
+    var loadInterval = setInterval(function() {
+      width += Math.random() * 30;
+      if (width >= 100) { width = 100; clearInterval(loadInterval); }
+      loadBar.style.width = width + '%';
+      if (width >= 100) {
+        setTimeout(function() { loader.classList.add('hidden'); }, 300);
+      }
+    }, 100);
+
+    function typewriter(el, text, speed) {
+      var i = 0;
+      el.textContent = '';
+      function tick() {
+        if (i < text.length) {
+          el.textContent += text.charAt(i);
+          i++;
+          setTimeout(tick, speed);
+        }
+      }
+      tick();
+    }
+
+    var handleText = '@pop722434';
+    typewriter(document.querySelector('.handle .at'), handleText, 60);
+
+    var bioText = 'Developer & maker. Building tools, mods, and experiments.';
+    var bioEl = document.querySelector('.bio');
+    bioEl.textContent = '';
+    typewriter(bioEl, bioText, 40);
   </script>
   <div class="spacer"></div>
   <div class="content">
@@ -112,7 +209,7 @@
       <h1>『!Сapybara¡』</h1>
       <div class="at"></div>
     </div>
-    <p class="bio">Developer &amp; maker. Building tools, mods, and experiments.</p>
+    <p class="bio"></p>
     <div class="stats">
       <div class="stat"><span>24</span> repos</div>
       <div class="stat"><span>3</span> stars</div>
@@ -121,8 +218,7 @@
     </div>
     <div class="panel">
       <h3>About</h3>
-      <p>
-      </p>
+      <p></p>
     </div>
     <div class="panel">
       <h3>Interests</h3>
