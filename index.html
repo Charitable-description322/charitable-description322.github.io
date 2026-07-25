@@ -26,16 +26,15 @@
       background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%);
       z-index: -1;
     }
-    .trail {
+    .trail-dot {
       position: fixed;
       width: 6px; height: 6px;
       border-radius: 50%;
       background: #fff;
-      box-shadow: 0 0 8px 2px rgba(255,255,255,0.6);
+      box-shadow: 0 0 6px 2px rgba(255,255,255,0.5);
       pointer-events: none;
       z-index: 9999;
-      transition: opacity 0.15s ease;
-      opacity: 0;
+      transition: opacity 0.1s ease, transform 0.1s ease;
     }
     #loader {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -115,7 +114,7 @@
     <div class="bar"><div class="bar-inner" id="loadBar"></div></div>
     <div class="text">Loading...</div>
   </div>
-  <div class="trail" id="trail"></div>
+  
   <div class="avatar-fixed"><img src="https://images-ext-1.discordapp.net/external/MnFq7Ayc_rOQQaCTWb2t9lwyhigo69zaugW7tV3XBpc/%3Fsize%3D512/https/cdn.discordapp.com/avatars/1139133371683971093/6b941183dd830d0df1a4ce95cb03259b.png?format=webp&quality=lossless" alt="avatar"></div>
   <div class="music-player">
     <img src="song.webp" alt="album art" onerror="this.style.display='none'">
@@ -137,47 +136,83 @@
     var playBtn = document.getElementById('playBtn');
     var pauseBtn = document.getElementById('pauseBtn');
     var volumeSlider = document.getElementById('volumeSlider');
-    window.addEventListener('DOMContentLoaded', function() {
-    audio.play();
-    img.classList.add('spinning');
-  });
-  playBtn.onclick = function() { audio.play(); img.classList.add('spinning'); };
-  pauseBtn.onclick = function() { audio.pause(); img.classList.remove('spinning'); };
-  audio.onended = function() { img.classList.remove('spinning'); };
-  volumeSlider.oninput = function() { audio.volume = volumeSlider.value; };
+    var player = document.querySelector('.music-player');
 
-  var player = document.querySelector('.music-player');
-  function updatePlayerWidth() {
-    var title = document.querySelector('.song-title');
-    if (title && title.textContent && title.textContent.length > 0) {
-      player.style.width = Math.max(200, Math.min(400, title.scrollWidth + 200)) + 'px';
-    } else {
-      player.style.width = '200px';
+    function fitPlayerWidth() {
+      var title = document.querySelector('.song-title');
+      var text = title.textContent || '';
+      var c = document.createElement('canvas');
+      var ctx = c.getContext('2d');
+      ctx.font = '13px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif';
+      var w = ctx.measureText(text).width + 200;
+      player.style.width = Math.max(200, Math.min(400, w)) + 'px';
     }
-  }
-  updatePlayerWidth();
-  if (typeof ResizeObserver !== 'undefined') {
-    new ResizeObserver(updatePlayerWidth).observe(document.querySelector('.song-title'));
-  }
+    fitPlayerWidth();
 
-    var trail = document.getElementById('trail');
-  document.addEventListener('mousemove', function(e) {
-    trail.style.left = e.clientX + 'px';
-    trail.style.top = e.clientY + 'px';
-    trail.style.opacity = '1';
-  });
-  document.addEventListener('mouseleave', function() {
-    trail.style.opacity = '0';
-  });
+    playBtn.onclick = function() { audio.play(); img.classList.add('spinning'); };
+    pauseBtn.onclick = function() { audio.pause(); img.classList.remove('spinning'); };
+    audio.onended = function() { img.classList.remove('spinning'); };
+    volumeSlider.oninput = function() { audio.volume = volumeSlider.value; };
+
+    var trailDots = [];
+    var trailCount = 15;
+    for (var i = 0; i < trailCount; i++) {
+      var dot = document.createElement('div');
+      dot.className = 'trail-dot';
+      dot.style.opacity = '0';
+      var size = 6 - i * 0.3;
+      dot.style.width = size + 'px';
+      dot.style.height = size + 'px';
+      document.body.appendChild(dot);
+      trailDots.push({ el: dot, x: 0, y: 0 });
+    }
+    var mouseX = 0, mouseY = 0;
+    document.addEventListener('mousemove', function(e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    document.addEventListener('mouseleave', function() {
+      trailDots.forEach(function(d) { d.el.style.opacity = '0'; });
+    });
+    function animateTrail() {
+      trailDots[0].el.style.left = mouseX + 'px';
+      trailDots[0].el.style.top = mouseY + 'px';
+      trailDots[0].el.style.opacity = '1';
+      for (var i = 1; i < trailDots.length; i++) {
+        var prev = trailDots[i - 1];
+        var curr = trailDots[i];
+        curr.x += (prev.x - curr.x) * 0.3;
+        curr.y += (prev.y - curr.y) * 0.3;
+        prev.x = parseFloat(prev.el.style.left) || mouseX;
+        prev.y = parseFloat(prev.el.style.top) || mouseY;
+        curr.el.style.left = curr.x + 'px';
+        curr.el.style.top = curr.y + 'px';
+        curr.el.style.opacity = Math.max(0, 1 - i / trailCount);
+      }
+      requestAnimationFrame(animateTrail);
+    }
+    animateTrail();
+
+    var played = false;
+    function startAudio() {
+      if (!played) {
+        played = true;
+        audio.play().then(function() { img.classList.add('spinning'); }).catch(function(){});
+        document.removeEventListener('click', startAudio);
+        document.removeEventListener('touchstart', startAudio);
+      }
+    }
+    document.addEventListener('click', startAudio);
+    document.addEventListener('touchstart', startAudio);
 
     var loader = document.getElementById('loader');
     var loadBar = document.getElementById('loadBar');
-    var width = 0;
+    var w = 0;
     var loadInterval = setInterval(function() {
-      width += Math.random() * 30;
-      if (width >= 100) { width = 100; clearInterval(loadInterval); }
-      loadBar.style.width = width + '%';
-      if (width >= 100) {
+      w += Math.random() * 30;
+      if (w >= 100) { w = 100; clearInterval(loadInterval); }
+      loadBar.style.width = w + '%';
+      if (w >= 100) {
         setTimeout(function() { loader.classList.add('hidden'); }, 300);
       }
     }, 100);
@@ -195,13 +230,9 @@
       tick();
     }
 
-    var handleText = '@pop722434';
-    typewriter(document.querySelector('.handle .at'), handleText, 60);
-
-    var bioText = 'Developer & maker. Building tools, mods, and experiments.';
+    typewriter(document.querySelector('.handle .at'), '@pop722434', 60);
     var bioEl = document.querySelector('.bio');
-    bioEl.textContent = '';
-    typewriter(bioEl, bioText, 40);
+    typewriter(bioEl, 'Developer & maker. Building tools, mods, and experiments.', 40);
   </script>
   <div class="spacer"></div>
   <div class="content">
