@@ -423,5 +423,13 @@
     <div class="footer"></div>
     <div class="scroll-hint">scroll</div>
   </div>
+  <script>
+    document.querySelectorAll('.panel').forEach(function(p) {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { rootMargin: '0px 0px -60px 0px' });
+      obs.observe(p);
+    });
+  </script>
 </body>
 </html>
