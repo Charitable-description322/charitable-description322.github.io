@@ -298,7 +298,7 @@
       typewriter(document.querySelectorAll('.panel h3')[1], 'Interests', 50);
       typewriter(document.querySelectorAll('.panel h3')[2], 'Projects', 50);
       typewriter(document.querySelectorAll('.panel h3')[3], 'Links', 50);
-      var linksPs = document.querySelectorAll('.panel:last-child p');
+      var linksPs = document.querySelectorAll('.panel')[3].querySelectorAll('p');
       typewriter(linksPs[0], 'Discord: sudoeoev', 40);
       typewriter(linksPs[1], 'Telegram: @WotwFan', 40);
       typewriter(document.querySelector('.footer'), 'Hosted on GitHub Pages', 40);
