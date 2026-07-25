@@ -11,6 +11,18 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: #000; color: #c9d1d9; line-height: 1.6;
       overflow-y: scroll;
+      background-image: url('https://preview.redd.it/what-do-you-think-humanity-did-after-the-ending-of-the-2005-v0-9f1z1324rpqe1.jpeg?auto=webp&s=85d566fac420a04ba0ed0462d6af18469e052373');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%);
+      z-index: -1;
     }
     .avatar-fixed {
       position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
