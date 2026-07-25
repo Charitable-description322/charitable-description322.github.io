@@ -235,7 +235,6 @@
 
     function typewriter(el, text, speed) {
       var i = 0;
-      el.textContent = '';
       function tick() {
         if (i < text.length) {
           el.textContent += text.charAt(i);
@@ -246,14 +245,16 @@
       tick();
     }
 
-    typewriter(document.querySelector('.handle h1'), '『!Сapybara¡』', 40);
-    typewriter(document.querySelector('.handle .at'), '@pop722434', 60);
-    typewriter(document.querySelector('.bio'), 'Developer & maker. Building tools, mods, and experiments.', 40);
-    typewriter(document.querySelector('.stat'), 'Custom text here', 40);
-    typewriter(document.querySelectorAll('.panel h3')[0], 'About', 50);
-    typewriter(document.querySelectorAll('.panel h3')[1], 'Interests', 50);
-    typewriter(document.querySelectorAll('.panel h3')[2], 'Projects', 50);
-    typewriter(document.querySelectorAll('.panel h3')[3], 'Links', 50);
+    window.addEventListener('DOMContentLoaded', function() {
+      typewriter(document.querySelector('.handle h1'), '『!Сapybara¡』', 40);
+      typewriter(document.querySelector('.handle .at'), '@pop722434', 60);
+      typewriter(document.querySelector('.bio'), 'Developer & maker. Building tools, mods, and experiments.', 40);
+      typewriter(document.querySelector('.stat'), 'Custom text here', 40);
+      typewriter(document.querySelectorAll('.panel h3')[0], 'About', 50);
+      typewriter(document.querySelectorAll('.panel h3')[1], 'Interests', 50);
+      typewriter(document.querySelectorAll('.panel h3')[2], 'Projects', 50);
+      typewriter(document.querySelectorAll('.panel h3')[3], 'Links', 50);
+    });
   </script>
   <div class="spacer"></div>
   <div class="content">
