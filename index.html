@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Capy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     html, body { min-height: 100%; height: auto; }
     body {
-      background-color: #000;
-      padding-bottom: 60px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #000; color: #c9d1d9; line-height: 1.6;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #000; color: #e6edf3; line-height: 1.7;
       overflow-y: scroll;
       background-image: url('https://preview.redd.it/what-do-you-think-humanity-did-after-the-ending-of-the-2005-v0-9f1z1324rpqe1.jpeg?auto=webp&s=85d566fac420a04ba0ed0462d6af18469e052373');
       background-size: cover;
@@ -21,128 +21,150 @@
     }
     body::before {
       content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%);
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 100%);
       z-index: -1;
     }
+    .stars {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none; z-index: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1.5px 1.5px at 90% 80%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.15), transparent),
+        radial-gradient(1px 1px at 60% 90%, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1.5px 1.5px at 40% 30%, rgba(255,255,255,0.25), transparent),
+        radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,0.15), transparent),
+        radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.2), transparent);
+      animation: twinkle 4s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
     .trail-dot {
-      position: fixed;
-      width: 6px; height: 6px;
+      position: fixed; width: 5px; height: 5px;
       border-radius: 50%;
       background: #fff;
-      box-shadow: 0 0 6px 2px rgba(255,255,255,0.5);
-      pointer-events: none;
-      z-index: 9999;
-      transition: opacity 0.1s ease, transform 0.1s ease;
+      box-shadow: 0 0 8px 3px rgba(255,255,255,0.4);
+      pointer-events: none; z-index: 9999;
     }
     #loader {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: #000; z-index: 10000;
       display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 20px;
-      cursor: pointer;
-      transition: opacity 0.6s ease;
+      flex-direction: column; gap: 24px;
+      cursor: pointer; transition: opacity 0.6s ease;
     }
     #loader.hidden { opacity: 0; pointer-events: none; }
-    #loader .bar { width: 200px; height: 3px; background: #21262d; border-radius: 2px; overflow: hidden; }
-    #loader .bar-inner { width: 0%; height: 100%; background: #fff; border-radius: 2px; transition: width 0.3s ease; }
-    #loader .text { color: #8b949e; font-size: 13px; transition: opacity 0.3s ease; }
+    #loader .bar { width: 220px; height: 3px; background: #1a1a2e; border-radius: 4px; overflow: hidden; }
+    #loader .bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2, #fff); border-radius: 4px; transition: width 0.3s ease; background-size: 200%; animation: gradShift 2s linear infinite; }
+    @keyframes gradShift { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+    #loader .text { color: #8b949e; font-size: 13px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; transition: opacity 0.3s ease; }
     #loader .enter-btn {
-      opacity: 0; transition: opacity 0.5s ease;
-      padding: 10px 24px; border: 1px solid #30363d; border-radius: 6px;
-      color: #e6edf3; font-size: 14px; background: #0d1117;
-      cursor: pointer;
+      opacity: 0; transition: all 0.5s ease;
+      padding: 12px 32px; border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px; color: #fff; font-size: 14px; font-weight: 500;
+      background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+      cursor: pointer; letter-spacing: 1px;
     }
-    #loader .enter-btn:hover { border-color: #fff; }
+    #loader .enter-btn:hover { border-color: #fff; background: rgba(255,255,255,0.1); box-shadow: 0 0 24px rgba(255,255,255,0.1); }
     #loader.show-btn .enter-btn { opacity: 1; }
     .avatar-fixed {
-      position: relative; margin: 40px auto 0;
+      position: relative; margin: 50px auto 0;
       width: 150px; height: 150px; border-radius: 50%;
-      background: #161b22; border: 3px solid #30363d; z-index: 100;
-      overflow: hidden;
+      padding: 3px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
+      z-index: 100; overflow: hidden;
     }
     .avatar-fixed img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
     .spacer { height: 30px; }
-    .content { padding: 0 20px 40px; max-width: 720px; margin: 0 auto; }
-    .handle { text-align: center; margin-bottom: 8px; }
-    .handle h1 { color: #e6edf3; font-size: 24px; }
-    .handle .at { color: #8b949e; font-size: 14px; }
-    .bio { text-align: center; margin: 40px 0; color: #c9d1d9; font-size: 15px; }
-    .stats { display: flex; justify-content: center; gap: 24px; margin: 32px 0; flex-wrap: wrap; }
-    .stat { color: #8b949e; font-size: 14px; }
-    .stat span { color: #58a6ff; }
+    .content { padding: 0 24px 60px; max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
+    .handle { text-align: center; margin-bottom: 4px; }
+    .handle h1 { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #fff, #a0a0b0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
+    .handle .at { color: #6b7280; font-size: 14px; font-weight: 400; }
+    .bio { text-align: center; margin: 24px 0; color: #9ca3af; font-size: 15px; font-weight: 300; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .stats { display: flex; justify-content: center; gap: 24px; margin: 28px 0; flex-wrap: wrap; }
+    .stat { color: #6b7280; font-size: 14px; font-weight: 300; }
+    @keyframes borderGlow {
+      0%, 100% { border-color: rgba(255,255,255,0.08); box-shadow: 0 0 0 transparent; }
+      50% { border-color: rgba(255,255,255,0.15); box-shadow: 0 0 30px rgba(255,255,255,0.03); }
+    }
     .panel {
-      background: rgba(13,17,23,0.6); border: 1px solid #21262d; border-radius: 8px; padding: 20px; margin-bottom: 24px;
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+      background: rgba(10,12,18,0.5); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 24px; margin-bottom: 20px;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      animation: borderGlow 4s ease-in-out infinite;
     }
     .panel:hover {
-      border-color: #fff;
-      box-shadow: 0 0 20px rgba(255,255,255,0.15);
-      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.3);
+      box-shadow: 0 0 40px rgba(255,255,255,0.06);
+      transform: translateY(-3px);
     }
-    .panel h3 { font-size: 16px; color: #e6edf3; margin-bottom: 8px; }
-    .panel p { font-size: 14px; color: #8b949e; }
-    .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #21262d; text-align: center; font-size: 12px; color: #484f58; }
+    .panel h3 { font-size: 15px; color: #e6edf3; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.3px; }
+    .panel p { font-size: 14px; color: #9ca3af; font-weight: 300; line-height: 1.8; }
+    .footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; font-size: 12px; color: #484f58; font-weight: 300; }
     .music-player {
       position: fixed; top: 20px; right: 20px; z-index: 100;
-      background: rgba(13,17,23,0.6); border: 1px solid #21262d; border-radius: 8px;
-      padding: 12px; display: flex; align-items: center; gap: 12px;
-      flex-wrap: wrap;
-      backdrop-filter: blur(10px);
-      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-      min-width: 100px;
+      background: rgba(10,12,18,0.6); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 14px;
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      transition: all 0.3s ease; min-width: 100px;
     }
     .music-player:hover {
-      border-color: #fff;
-      box-shadow: 0 0 20px rgba(255,255,255,0.15);
-      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.2);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     }
-    .music-player img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+    .music-player img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     .music-player img.spinning { animation: spin 3s linear infinite; }
     .music-player .player-info { flex: 1; min-width: 0; }
-    .music-player .player-info .song-title { font-size: 13px; color: #e6edf3; white-space: nowrap; }
-    .music-player .player-info .song-artist { font-size: 11px; color: #8b949e; }
+    .music-player .player-info .song-title { font-size: 13px; color: #e6edf3; font-weight: 500; white-space: nowrap; }
+    .music-player .player-info .song-artist { font-size: 11px; color: #6b7280; font-weight: 300; }
     .music-player audio { display: none; }
-    .music-player .controls { display: flex; gap: 8px; align-items: center; }
+    .music-player .controls { display: flex; gap: 6px; align-items: center; }
     .music-player .controls button {
-      background: none; border: 1px solid #30363d; color: #c9d1d9;
-      border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 12px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: #d1d5db; border-radius: 6px; padding: 6px 10px;
+      cursor: pointer; font-size: 12px; transition: all 0.2s;
     }
-    .music-player .controls button:hover { background: #161b22; }
+    .music-player .controls button:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
     .music-player input[type="range"] {
-      width: 60px; height: 4px;
+      width: 56px; height: 3px;
       -webkit-appearance: none; appearance: none;
-      background: #30363d; border-radius: 2px; outline: none;
-      cursor: pointer;
+      background: rgba(255,255,255,0.1); border-radius: 2px; outline: none; cursor: pointer;
     }
     .music-player input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none; appearance: none;
-      width: 12px; height: 12px; border-radius: 50%;
+      width: 10px; height: 10px; border-radius: 50%;
       background: #fff; border: none; cursor: pointer;
-      box-shadow: 0 0 6px 2px rgba(255,255,255,0.5);
+      box-shadow: 0 0 8px 2px rgba(255,255,255,0.3);
     }
     .progress-wrap {
       width: 100%; display: flex; align-items: center; gap: 8px;
-      position: relative; order: 1;
+      position: relative; order: 1; margin-top: 2px;
     }
     .progress-bar {
-      flex: 1; height: 4px; background: #30363d; border-radius: 2px;
+      flex: 1; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px;
       cursor: pointer; position: relative; overflow: hidden;
     }
     .progress-bar-fill {
-      height: 100%; width: 0%; background: #fff; border-radius: 2px;
-      transition: width 0.1s linear;
+      height: 100%; width: 0%; background: linear-gradient(90deg, #667eea, #764ba2, #fff);
+      border-radius: 2px; transition: width 0.1s linear; background-size: 200%; animation: gradShift 2s linear infinite;
     }
     .progress-wrap .time-current,
     .progress-wrap .time-total {
-      font-size: 10px; color: #8b949e; min-width: 28px; text-align: center;
+      font-size: 10px; color: #6b7280; min-width: 28px; text-align: center; font-weight: 300;
     }
   </style>
 </head>
 <body>
+  <div class="stars"></div>
   <div id="loader">
     <div class="bar"><div class="bar-inner" id="loadBar"></div></div>
     <div class="text">Loading...</div>
@@ -159,7 +181,7 @@
     <div class="controls">
       <button id="playBtn">▶</button>
       <button id="pauseBtn">⏸</button>
-      <span style="color:#8b949e;font-size:11px">Volume:</span>
+      <span style="color:#6b7280;font-size:11px;font-weight:300">Vol</span>
       <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
     </div>
     <div class="progress-wrap" id="progressWrap">
@@ -205,12 +227,12 @@
     }
 
     var trailDots = [];
-    var trailCount = 15;
+    var trailCount = 12;
     for (var i = 0; i < trailCount; i++) {
       var dot = document.createElement('div');
       dot.className = 'trail-dot';
       dot.style.opacity = '0';
-      var size = 6 - i * 0.3;
+      var size = 5 - i * 0.3;
       dot.style.width = size + 'px';
       dot.style.height = size + 'px';
       document.body.appendChild(dot);
@@ -218,8 +240,7 @@
     }
     var mouseX = 0, mouseY = 0;
     document.addEventListener('mousemove', function(e) {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      mouseX = e.clientX; mouseY = e.clientY;
     });
     document.addEventListener('mouseleave', function() {
       trailDots.forEach(function(d) { d.el.style.opacity = '0'; });
