@@ -6,10 +6,11 @@
   <title>pop722434 - GitHub Profile</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: #000; color: #c9d1d9; line-height: 1.6;
-      max-width: 720px; margin: 0 auto; padding: 0 20px;
+      overflow-y: scroll;
     }
     .avatar-fixed {
       position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
@@ -17,7 +18,8 @@
       background: #161b22; border: 2px solid #30363d; z-index: 100;
     }
     .avatar-fixed img { width: 100%; height: 100%; border-radius: 50%; display: none; }
-    .spacer { height: 120px; }
+    .spacer { height: 140px; }
+    .content { padding: 0 20px 40px; max-width: 720px; margin: 0 auto; }
     .handle { text-align: center; margin-bottom: 8px; }
     .handle h1 { color: #e6edf3; font-size: 24px; }
     .handle .at { color: #8b949e; font-size: 14px; }
@@ -25,54 +27,44 @@
     .stats { display: flex; justify-content: center; gap: 24px; margin: 16px 0; flex-wrap: wrap; }
     .stat { color: #8b949e; font-size: 14px; }
     .stat span { color: #58a6ff; }
-    .repos h2 { font-size: 18px; color: #e6edf3; margin: 32px 0 16px; border-bottom: 1px solid #21262d; padding-bottom: 8px; }
-    .repo { background: #0d1117; border: 1px solid #21262d; border-radius: 6px; padding: 16px; margin-bottom: 12px; }
-    .repo h3 { font-size: 15px; }
-    .repo h3 a { color: #58a6ff; text-decoration: none; }
-    .repo h3 a:hover { text-decoration: underline; }
-    .repo p { font-size: 13px; color: #8b949e; margin-top: 4px; }
-    .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-    .tag { background: #161b22; color: #8b949e; padding: 2px 8px; border-radius: 12px; font-size: 11px; border: 1px solid #21262d; }
+    .panel { background: #0d1117; border: 1px solid #21262d; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+    .panel h3 { font-size: 16px; color: #e6edf3; margin-bottom: 8px; }
+    .panel p { font-size: 14px; color: #8b949e; }
     .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #21262d; text-align: center; font-size: 12px; color: #484f58; }
   </style>
 </head>
 <body>
   <div class="avatar-fixed"><img src="https://avatars.githubusercontent.com/u/168979655?v=4" alt="avatar"></div>
   <div class="spacer"></div>
-  <div class="handle">
-    <h1>capy</h1>
-    <div class="at">@pop722434</div>
+  <div class="content">
+    <div class="handle">
+      <h1>capy</h1>
+      <div class="at">@pop722434</div>
+    </div>
+    <p class="bio">Developer &amp; maker. Building tools, mods, and experiments.</p>
+    <div class="stats">
+      <div class="stat"><span>24</span> repos</div>
+      <div class="stat"><span>3</span> stars</div>
+      <div class="stat"><span>1</span> following</div>
+      <div class="stat"><span>0</span> followers</div>
+    </div>
+    <div class="panel">
+      <h3>About</h3>
+      <p>I build open-source tools and mods. Currently working on Roblox-related projects and Minecraft modifications. Exploring the intersection of game development, networking, and automation.</p>
+    </div>
+    <div class="panel">
+      <h3>Interests</h3>
+      <p>Game modding, network security, reverse engineering, automation, and scripting. Comfortable with Java, Lua, and JavaScript.</p>
+    </div>
+    <div class="panel">
+      <h3>Projects</h3>
+      <p>Check out my repositories for tools and mods I've built. From Minecraft downloaders to Roblox introspection frameworks — I like building things that solve real problems.</p>
+    </div>
+    <div class="panel">
+      <h3>Links</h3>
+      <p><a href="https://github.com/pop722434" style="color:#58a6ff">GitHub Profile</a> &middot; <a href="https://github.com/pop722434?tab=repositories" style="color:#58a6ff">Repositories</a> &middot; <a href="https://github.com/pop722434?tab=stars" style="color:#58a6ff">Stars</a></p>
+    </div>
+    <div class="footer">Hosted on GitHub Pages</div>
   </div>
-  <p class="bio">Developer &amp; maker. Building tools, mods, and experiments.</p>
-  <div class="stats">
-    <div class="stat"><span>24</span> repos</div>
-    <div class="stat"><span>3</span> stars</div>
-    <div class="stat"><span>1</span> following</div>
-    <div class="stat"><span>0</span> followers</div>
-  </div>
-  <div class="repos">
-    <h2>Repositories</h2>
-    <div class="repo">
-      <h3><a href="https://github.com/pop722434/DropperMod">DropperMod</a></h3>
-      <p>&#x1F527; A Minecraft mod which can download and execute files</p>
-      <div class="tags"><span class="tag">Java</span><span class="tag">Minecraft</span><span class="tag">MIT</span></div>
-    </div>
-    <div class="repo">
-      <h3><a href="https://github.com/pop722434/Hydroxide">Hydroxide</a></h3>
-      <p>&#x1F3AE; Lua runtime introspection and network capturing tool for Roblox</p>
-      <div class="tags"><span class="tag">Lua</span><span class="tag">Roblox</span></div>
-    </div>
-    <div class="repo">
-      <h3><a href="https://github.com/pop722434/ProxyService">ProxyService</a></h3>
-      <p>JavaScript proxy service</p>
-      <div class="tags"><span class="tag">JavaScript</span><span class="tag">MIT</span></div>
-    </div>
-    <div class="repo">
-      <h3><a href="https://github.com/pop722434/wallpapers">wallpapers</a></h3>
-      <p>Wallpapers collection</p>
-      <div class="tags"><span class="tag">Assets</span></div>
-    </div>
-  </div>
-  <div class="footer">Hosted on GitHub Pages &middot; <a href="https://github.com/pop722434" style="color:#58a6ff">pop722434</a></div>
 </body>
 </html>
