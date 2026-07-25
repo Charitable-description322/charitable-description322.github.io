@@ -61,7 +61,7 @@
     }
     #loader.hidden { opacity: 0; pointer-events: none; }
     #loader .bar { width: 220px; height: 3px; background: #1a1a2e; border-radius: 4px; overflow: hidden; }
-    #loader .bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2, #fff); border-radius: 4px; transition: width 0.3s ease; background-size: 200%; animation: gradShift 2s linear infinite; }
+    #loader .bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #444, #aaa, #fff); border-radius: 4px; transition: width 0.3s ease; background-size: 200%; animation: gradShift 2s linear infinite; }
     @keyframes gradShift { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
     #loader .text { color: #8b949e; font-size: 13px; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; transition: opacity 0.3s ease; }
     #loader .enter-btn {
@@ -154,7 +154,7 @@
       cursor: pointer; position: relative; overflow: hidden;
     }
     .progress-bar-fill {
-      height: 100%; width: 0%; background: linear-gradient(90deg, #667eea, #764ba2, #fff);
+      height: 100%; width: 0%; background: linear-gradient(90deg, #444, #aaa, #fff);
       border-radius: 2px; transition: width 0.1s linear; background-size: 200%; animation: gradShift 2s linear infinite;
     }
     .progress-wrap .time-current,
